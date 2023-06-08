@@ -1,0 +1,49 @@
+<?php
+include("conexion.php");
+$persona = "SELECT * FROM persona";
+
+$resultado = mysqli_query($conexion, $persona);
+?>
+
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <meta name="viewport" content="width=device- width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0,minimum-scale=1.0">
+    <link rel="stylesheet" href="consultar_datos.css">
+</head>
+
+<body>
+    <div class="datos">
+            <a href="index.php">Datos Usuarios</a>
+            <a href="consultar_datos.php">Consultar Datos de Usuario</a>
+    </div>
+
+
+    <div class="container-table">
+        <div class="table__title">DATOS DE ALUMNOS</div>
+        <div class="table__header">ID</div>
+        <div class="table__header">DNI</div>
+        <div class="table__header">NOMBRES</div>
+        <div class="table__header">EMAIL:</div>
+
+        <?php
+        while ($row = mysqli_fetch_assoc($resultado)) {
+        ?>
+
+            <div class="table__item"><?php echo $row["id"]; ?></div>
+            <div class="table__item"><?php echo $row["dni"]; ?></div>
+            <div class="table__item"><?php echo $row["usuario"]; ?></div>
+            <div class="table__item"><?php echo $row["email"]; ?></div>
+
+        <?php
+        }
+        mysqli_free_result($resultado);
+        ?>
+
+    </div>
+</body>
+
+</html>

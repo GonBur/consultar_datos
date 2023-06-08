@@ -1,0 +1,151 @@
+<?php
+include("conexion.php");
+
+$persona = "SELECT * FROM persona";
+$resultado = mysqli_query($conexion, $persona);
+?>
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0,minimum-scale=1.0">
+    
+    <style>
+        :root {
+    --color-principal: aliceblue;
+    --tamaño-letra: 62.5%;
+    --color-secundario: rgb(81, 255, 0, 50%);
+}
+
+html {
+    font-size: var(--tamaño-letra);
+}
+
+body {
+    text-align: center;
+    font-size:2rem;
+}
+
+h1 {
+    font-size: 3rem;
+}
+/* datos */
+.datos{
+    margin: 2% auto;
+    width: 50%;
+    padding: 1rem;
+    display: flex;
+    justify-content: space-around;
+}
+.datos a{
+    border: solid black;
+    background-color: aliceblue;
+    padding: 1.5rem;
+    text-decoration: none;
+    border-radius: 1rem;
+    font-size: 3rem;
+    font-weight: bold;
+}
+/* formulario */
+form{
+    width: 50%;
+    margin: 2% auto;
+}
+form input, label,button{
+    font-size: 2.5rem;
+    font-weight: bold;
+    text-align:center;
+    border-radius:1rem;
+    padding:1rem;
+    margin: 0 1rem;
+}
+button{
+    color: white;
+    background-color:blue;
+}
+button:hover{
+    color: blue;
+    background-color:white;
+}
+/*  */
+
+.container-table, .tabla{
+    background-color: var(--color-principal);
+    display: grid;
+    grid: auto / repeat(4, 1fr);
+    width: 60%;
+    margin: auto;
+    border-radius: 1.5rem;
+    font-size: 2.5rem;
+    padding: 1.5rem;
+}
+.table__title{
+    text-shadow: 1px 2px 3px red;
+    border-bottom: solid;
+    grid-column: 1 /5;
+    padding: 1.5rem;
+}
+.th{
+    text-shadow: 1px 2px 3px blue;
+    background-color: var(--color-secundario);
+    border: solid;
+}
+.td{
+    color:black;
+    font-weight: bold;
+    text-shadow: 1px 2px 3px blue;
+}
+    </style>
+</head>
+<body>
+
+    <div class="datos">
+            <a href="index.php">Datos Usuarios</a>
+            <a href="consultar_datos.php">Consultar Datos de Usuario</a>
+    </div>
+
+
+
+    <form action="consultar_datos.php" method="POST">
+        <label for="dni">Ingrese el DNI o ID:</label>
+        <input type="text" name="valor" id="valor" required placeholder="Ingresar Dni o Id">
+        <button type="submit">Consultar</button>
+    </form>
+
+    <div class="container-table">
+        <div class="table__title">DATOS DE ALUMNOS</div>
+        <div class="th">ID</div>
+        <div class="th">DNI</div>
+        <div class="th">NOMBRES</div>
+        <div class="th">EMAIL</div>
+    </div>
+
+
+    <?php 
+    if (isset($_POST['valor'])) {
+        $valor = $_POST['valor'];
+        $consulta = "SELECT * FROM persona WHERE dni = '$valor' OR id = '$valor'";
+        $resultado = mysqli_query($conexion, $consulta);
+
+        if ($resultado && mysqli_num_rows($resultado) > 0) {
+            // Mostrar los datos obtenidos
+            while ($row = mysqli_fetch_assoc($resultado)) {
+                echo "<div class='tabla-contenedor tabla'>";
+                echo "<div class='td'>" . $row["id"] . "</div>";
+                echo "<div class='td'>" . $row["dni"] . "</div>";
+                echo "<div class='td'>" . $row["usuario"] . "</div>";
+                echo "<div class='td'>" . $row["email"] . "</div>";
+                echo "</div>";
+            }
+        } else {
+            echo "No se encontraron resultados.";
+        }
+    }
+
+    mysqli_free_result($resultado);
+    mysqli_close($conexion);
+    ?>
+</body>
+</html>
